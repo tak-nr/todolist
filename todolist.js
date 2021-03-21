@@ -1,9 +1,13 @@
 const pendingList = document.querySelector(".pending");
 const finishedList = document.querySelector(".finished");
+let userName = "";
+const USERNAME = "userName";
 let lsPending = [];
 let lsFinished = [];
 const taskForm = document.querySelector(".taskForm");
 const taskInput = document.querySelector(".taskInput");
+const nameForm = document.querySelector(".nameForm");
+const nameInput = document.querySelector(".nameInput");
 const PENDING = "pending";
 const FINISHED = "finished";
 const NEXTID = "nextID";
@@ -14,6 +18,7 @@ init();
 function init() {
   loadFromLocalStorage();
   taskForm.addEventListener("submit", addTask);
+  nameForm.addEventListener("submit", addUserName);
 }
 
 function addTask(event) {
@@ -106,6 +111,7 @@ function loadFromLocalStorage() {
   const loadedPending = JSON.parse(localStorage.getItem(PENDING));
   const loadedFinished = JSON.parse(localStorage.getItem(FINISHED));
   const loadedNextID = localStorage.getItem(NEXTID);
+  const name = localStorage.getItem(USERNAME);
 
   if (loadedPending) {
     lsPending = loadedPending;
@@ -126,4 +132,25 @@ function loadFromLocalStorage() {
   if (loadedNextID) {
     nextID = loadedNextID;
   }
+
+  if (name) {
+    userName = name;
+    setUserName();
+  }
+}
+
+function addUserName(event) {
+  event.preventDefault();
+  const name = nameInput.value;
+  userName = name;
+  localStorage.setItem(USERNAME, userName);
+  setUserName();
+}
+
+function setUserName() {
+  const nameDiv = document.querySelector(".name");
+  const h1 = document.createElement("h1");
+  h1.innerText = `HELLO ${userName}!`;
+  nameDiv.removeChild(nameForm);
+  nameDiv.appendChild(h1);
 }
